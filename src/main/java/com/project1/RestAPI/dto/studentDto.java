@@ -1,10 +1,12 @@
 package com.project1.RestAPI.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class studentDto {
     private long id;
     private String name;

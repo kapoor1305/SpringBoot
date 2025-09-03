@@ -3,27 +3,27 @@ package com.project1.RestAPI.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project1.RestAPI.dto.studentDto;
-import com.project1.RestAPI.entity.student;
-import com.project1.RestAPI.repository.studentRepository;
+import com.project1.RestAPI.service.studentService;
 
+import lombok.AllArgsConstructor;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
+@AllArgsConstructor
 public class StudentController {
 
-    @Autowired
-    studentRepository studentRepository;
+    private final studentService studentService;
 
-    // public StudentController(studentRepository studentRepository) {
-    // this.studentRepository = studentRepository;
-    // }
+    @GetMapping("/students")
+    public List<studentDto> getAllStudents() {
+        return studentService.getAllStudents();
+    }
 
-    @GetMapping("/student")
-    public List<student> getStudent() {
-        return studentRepository.findAll();
+    @GetMapping("/students/{id}")
+    public studentDto getStudentById(@PathVariable Long id) {
+        return studentService.getStudentById(id);
     }
 
 }
