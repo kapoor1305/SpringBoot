@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.project1.RestAPI.dto.addStudentRequestDto;
 import com.project1.RestAPI.dto.studentDto;
 import com.project1.RestAPI.entity.student;
 import com.project1.RestAPI.repository.studentRepository;
@@ -37,6 +38,45 @@ public class studentServiceImple implements studentService {
         studentDto studentDto = modelMapper.map(student, studentDto.class); // type 2: modelmapping.
         return studentDto;
 
+    }
+
+    @Override
+    public studentDto createNewStudent(addStudentRequestDto addStudentRequestDto) {
+
+        student newStudent = modelMapper.map(addStudentRequestDto, student.class);
+        student student = studentRepository.save(newStudent);
+        return modelMapper.map(student, studentDto.class);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+        if (!studentRepository.existsById(id)) {
+            throw new IllegalArgumentException("Student not found by id: " + id);
+        }
+        studentRepository.deleteById(id);
+    }
+
+    @Override
+    public studentDto updateStudent(Long id, addStudentRequestDto addStudentRequestDto) {
+        student student = studentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found by id: " + id));
+
+        if (addStudentRequestDto.getName() != null && !addStudentRequestDto.getName().isEmpty()) {
+            student.setName(addStudentRequestDto.getName());
+        }
+        if (addStudentRequestDto.getEmail() != null && !addStudentRequestDto.getEmail().isEmpty()) {
+            student.setEmail(addStudentRequestDto.getEmail());
+        }
+
+        student updatedStudent = studentRepository.save(student);
+        return modelMapper.map(updatedStudent, studentDto.class);
+
+        // ## Another approach using ModelMapper with configuration to skip id mapping
+        // modelMapper.map(addStudentRequestDto, student);
+        // modelMapper.map(addStudentRequestDto.class, student.class);
+        // studentRepository.save(student);
+        // return modelMapper.map(student, studentDto.class);
     }
 
 }
