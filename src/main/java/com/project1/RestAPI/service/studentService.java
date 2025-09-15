@@ -16,4 +16,6 @@ public interface studentService {
     void deleteById(Long id);
 
     studentDto updateStudent(Long id, addStudentRequestDto addStudentRequestDto);
+
+    studentDto partialUpdateStudent(Long id, addStudentRequestDto addStudentRequestDto);
 }

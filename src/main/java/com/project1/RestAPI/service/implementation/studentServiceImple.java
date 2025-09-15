@@ -62,12 +62,8 @@ public class studentServiceImple implements studentService {
         student student = studentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found by id: " + id));
 
-        if (addStudentRequestDto.getName() != null && !addStudentRequestDto.getName().isEmpty()) {
-            student.setName(addStudentRequestDto.getName());
-        }
-        if (addStudentRequestDto.getEmail() != null && !addStudentRequestDto.getEmail().isEmpty()) {
-            student.setEmail(addStudentRequestDto.getEmail());
-        }
+        student.setName(addStudentRequestDto.getName());
+        student.setEmail(addStudentRequestDto.getEmail());
 
         student updatedStudent = studentRepository.save(student);
         return modelMapper.map(updatedStudent, studentDto.class);
@@ -77,6 +73,23 @@ public class studentServiceImple implements studentService {
         // modelMapper.map(addStudentRequestDto.class, student.class);
         // studentRepository.save(student);
         // return modelMapper.map(student, studentDto.class);
+    }
+
+    @Override
+    public studentDto partialUpdateStudent(Long id, addStudentRequestDto addStudentRequestDto) {
+        student student = studentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+
+        if (addStudentRequestDto.getName() != null && !addStudentRequestDto.getName().isEmpty()) {
+            student.setName(addStudentRequestDto.getName());
+        }
+
+        if (addStudentRequestDto.getEmail() != null && !addStudentRequestDto.getEmail().isEmpty()) {
+            student.setEmail(addStudentRequestDto.getEmail());
+        }
+
+        studentRepository.save(student);
+
+        return modelMapper.map(student, studentDto.class);
     }
 
 }
