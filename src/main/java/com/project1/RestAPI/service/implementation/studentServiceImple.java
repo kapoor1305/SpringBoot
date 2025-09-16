@@ -1,6 +1,7 @@
 package com.project1.RestAPI.service.implementation;
 
 import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import com.project1.RestAPI.repository.studentRepository;
 import com.project1.RestAPI.service.studentService;
 
 import lombok.AllArgsConstructor;
+import lombok.val;
 
 @Service
 @AllArgsConstructor
@@ -90,6 +92,30 @@ public class studentServiceImple implements studentService {
         studentRepository.save(student);
 
         return modelMapper.map(student, studentDto.class);
+    }
+
+    @Override
+    public studentDto partialUpdateStudents(Long id, Map<String, Object> updates) {
+
+        student student = studentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+
+        updates.forEach((String field, Object value) -> {
+            switch (field) {
+                case "name":
+                    student.setName((String) value);
+                    break;
+
+                case "email":
+                    student.setEmail((String) value);
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Invalid field: " + field);
+            }
+        });
+        studentRepository.save(student);
+        return modelMapper.map(student, studentDto.class);
+
     }
 
 }

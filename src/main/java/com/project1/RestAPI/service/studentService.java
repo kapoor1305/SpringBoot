@@ -1,6 +1,7 @@
 package com.project1.RestAPI.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.project1.RestAPI.dto.addStudentRequestDto;
 import com.project1.RestAPI.dto.studentDto;
@@ -18,4 +19,6 @@ public interface studentService {
     studentDto updateStudent(Long id, addStudentRequestDto addStudentRequestDto);
 
     studentDto partialUpdateStudent(Long id, addStudentRequestDto addStudentRequestDto);
+
+    studentDto partialUpdateStudents(Long id, Map<String, Object> updates);
 }

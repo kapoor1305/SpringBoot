@@ -6,8 +6,10 @@ import com.project1.RestAPI.dto.addStudentRequestDto;
 import com.project1.RestAPI.dto.studentDto;
 import com.project1.RestAPI.service.studentService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +38,7 @@ public class StudentController {
     }
 
     @PostMapping("/students")
-    public ResponseEntity<studentDto> createNewStudent(@RequestBody addStudentRequestDto addStudentRequestDto) {
+    public ResponseEntity<studentDto> createNewStudent(@RequestBody @Valid addStudentRequestDto addStudentRequestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(studentService.createNewStudent(addStudentRequestDto));
     }
@@ -49,7 +51,7 @@ public class StudentController {
 
     @PutMapping("/students/{id}")
     public ResponseEntity<studentDto> updateStudent(@PathVariable Long id,
-            @RequestBody addStudentRequestDto addStudentRequestDto) {
+            @RequestBody @Valid addStudentRequestDto addStudentRequestDto) {
         if (id == null) {
             throw new IllegalArgumentException("id cannot be null");
         }
@@ -59,12 +61,22 @@ public class StudentController {
 
     @PatchMapping("/students/{id}")
     public ResponseEntity<studentDto> partialUpdateStudent(@PathVariable Long id,
-            @RequestBody addStudentRequestDto addStudentRequestDto) {
+            @RequestBody @Valid addStudentRequestDto addStudentRequestDto) {
         if (id == null) {
             throw new IllegalArgumentException("id cannot be null");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(studentService.partialUpdateStudent(id, addStudentRequestDto));
+    }
+
+    @PatchMapping("/student/{id}") // for partial update using map
+    public ResponseEntity<studentDto> partiallyUpdateStudent(@PathVariable Long id,
+            @RequestBody Map<String, Object> updates) {
+        if (id == null) {
+            throw new IllegalArgumentException("id cannot be null");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.partialUpdateStudents(id, updates));
     }
 
 }
